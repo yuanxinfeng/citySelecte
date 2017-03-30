@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>jquery.citySelect</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <!-- css -->
+    <link rel="stylesheet" href="css/weui.min.css">
+    <link rel="stylesheet" href="css/citys.css">
+    <style>
+        .weui-navbar__item1{
+            max-width:25%;
+        }
+        .weui-navbar__item2{
+            max-width:30%;
+        }
+        .weui-navbar__item3{
+            max-width:45%;
+        }
+        .panel{
+            margin-top: 10px
+        }
+        .addresss{
+            font-size: 15px;
+            text-align: left;
+            color: #aaaaaa;
+        }
+        .btnMar{
+            margin-top: 100px;
+        }
+        .weui-media-box__title{
+            font-size: 15px;
+            color: #aaaaaa;
+        }
+        .weui-icon-success-no-circle{
+            font-size: 12px;
+            color: #e64340;
+        }
+        .weui-btn_warn1{
+            background-color: #fff;
+            border:solid 1px #e64340;
+        }
+        .weui-btn1{
+            font-size: 11px;
+            width: 100px;
+            color: #e64340;
+            float: left;
+        }
+        .weui_default{
+            font-size: 11px;
+            width: 100px;
+            /*color: #aaaaaa;*/
+            float: left;
+        }
+        .a{
+            clear: left;
+        }
+        .aa{
+            margin-top: 0; 
+        }
+        .weui-toast1{
+            position: fixed;
+            z-index: 5000;
+            width: 50%;
+            min-height: 7.6em;
+            top: 180px;
+            left: 25%;
+            background: rgba(40,40,40,.75);
+            text-align: center;
+            border-radius: 5px;
+            color: #fff;
+        }
+        .weui-icon-info{
+            color: #fff;
+        }
+        .weui-icon_msg{
+            font-size: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="st-container">  
+        <div class="st-pusher">
+            <div class="st-content">
+                <div class="st-content-inner">
+                    <header class="st-header">
+                        <img src="img/rerurn.png" class="st-header_back"/>
+                        <span>新建收货人</span>
+                    </header>
+                    <section id="initForm">
+                        <div class="weui-cells weui-cells_form mt0">
+                            <div class="weui-cell">
+                                <div class="weui-cell__hd"><label class="weui-label">收货人：</label></div>
+                                <div class="weui-cell__bd">
+                                    <input class="weui-input" type="text" id="" placeholder="">
+                                </div>
+                            </div>
+                            <div class="weui-cell">
+                                <div class="weui-cell__hd"><label class="weui-label">联系方式：</label></div>
+                                <div class="weui-cell__bd">
+                                    <input class="weui-input" type="tel" placeholder="">
+                                </div>
+                            </div>
+                            <a class="weui-cell weui-cell_access" href="javascript:;">
+                                <div class="weui-cell__bd">
+                                    <p>所在地区：</p>
+                                </div>
+                                <div class="st-addresss ellipsis" style="position: fixed;
+    margin: 0 0 0 105px;" id="address"></div>
+                                <div class="weui-cell__ft"></div>
+                            </a>
+                            <div class="weui-cell">
+                                <div class="weui-cell__hd"><label class="weui-label">详细地址：</label></div>
+                                <div class="weui-cell__bd">
+                                    <input class="weui-input" type="text" placeholder="街道、楼牌号等">
+                                </div>
+                            </div>
+                            <a class="weui-cell weui-cell_access" href="javascript:;">
+                                <div class="weui-cell__bd">
+                                    <p>设置轻松购</p>
+                                </div>
+                                <div class="st-addresss ellipsis" id="address"></div>
+                                <div class="weui-cell__ft"></div>
+                            </a>
+                        </div>
+                        <div id="ShoppingMode" style="overflow-y: scroll;display: none">
+                            <div class="weui-panel__bd">
+                                <div class="weui-media-box weui-media-box_text">
+                                    <h6 class="weui-media-box__title">支付方式</h6>
+                                    <div id="payMode">
+                                        <a href="javascript:;" style="margin-bottom:15px" class="weui-btn weui-btn_warn1 weui_default weui-btn1 weui-btn_default" way="0">在线支付</a>
+                                        <a href="javascript:;" style="margin-top: 0;left: 5px;margin-bottom:15px" class="weui-btn weui_default weui-btn_default" way="1">货到付款</a>
+                                    </div>
+                                </div>
+                                <div class="weui-media-box weui-media-box_text a">
+                                    <h6 class="weui-media-box__title">配送方式</h6>
+                                    <div id="distributionMode">
+                                        <a href="javascript:;" style="margin-bottom:15px" class="weui-btn weui-btn_warn1 weui_default weui-btn1 weui-btn_default " way="0">狗东配送</a>
+                                        <a href="javascript:;" style="margin-top: 0;left: 5px;margin-bottom:15px" class="weui-btn weui_default weui-btn_default" way="1">上门自提</a>
+                                    </div>
+                                </div>
+                                <div class="weui-media-box weui-media-box_text a">
+                                    <h6 class="weui-media-box__title">下单方式</h6>
+                                    <div id="OrderWay">
+                                        <a href="javascript:;" style="margin-bottom:15px" class="weui-btn weui-btn_warn1 weui_default weui-btn1 weui-btn_default" way="0">一键下单</a>
+                                        <a href="javascript:;" style="margin-top: 0;left: 5px;margin-bottom:15px" class="weui-btn weui_default weui-btn_default" way="1">结算页下单</a>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div id="sumbit">
+                <a href="javascript:;" class="weui-btn weui-btn_warn" style="margin: 0 30px 0px 30px;">保存</a>
+            </div>
+        </div>
+        <div class="st-block" style="display: none">
+
+        </div>
+        <div id="initCity" class="st-city">
+            <header class="st-header">
+                <img src="img/close_red.png" class="st-header_close"/>
+            </header>
+            <div class="weui-tab">
+                <div class="weui-navbar">
+                    <div class="weui-navbar__item weui-navbar__item1 weui-bar__item_on" val='citys_province'>
+                        请选择
+                    </div>
+                    <div class="weui-navbar__item weui-navbar__item2" style="display: none" val='citys_city'>
+                        请选择
+                    </div>
+                    <div class="weui-navbar__item weui-navbar__item3" style="display: none" val='citys_county'>
+                        请选择
+                    </div>
+                </div>
+                <div class="weui-tab__panel">
+                    <div class="st-citys_province">
+                        <ul id="citys_province">
+                        </ul>
+                    </div>
+                    <div class="st-citys_city">
+                        <ul id="citys_city">
+                        </ul>
+                    </div>
+                    <div class="st-citys_county">
+                        <ul id="citys_county">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="toast" style="display: none;">
+        <div class="weui-mask_transparent"></div>
+        <div class="weui-toast1">
+            <i class="weui-icon-info weui-icon_msg weui-icon_toast"></i>
+            <p class="weui-toast__content" style="margin-top: 10px;" id="toastMsg">已完成</p>
+        </div>
+    </div>
+    <div class="weui-toast" style="display: none;">
+        <i class="weui-loading weui-icon_toast"></i>
+        <p class="weui-toast__content">保存数据中</p>
+    </div>
+
+<!-- 引入jQuery 2.0+ -->
+<script src="js/jquery-2.0.3.min.js"></script>
+<!-- 引入city.js脚本 -->
+<script src="js/jquery.citys.js"></script>
+<script>   
+    var jquery = $;
+    var citysData = citys;
+    var onceflag = true;//第一次数据刷新
+    var showflag = true;//是否显示轻松购
+    var province = '',city = '',county='';
+    var height = jquery('body').height();
+    var width = jquery('body').width();
+    var addressWidth = parseInt(width) - 145;
+    var sumbit_top = parseInt(height) - 56;
+    var cellsHeight = jquery('.weui-cells').height();
+    var ShoppingModeHeight = sumbit_top - parseInt(cellsHeight) - 50;
+    var consignee = jquery('#initForm').find('input').eq(0).val(),contactWay = jquery('#initForm').find('input').eq(1).val(),metaNameLocationContent = jquery('#initForm').find('a').eq(0).text(),detailedAddress = jquery('#initForm').find('input').eq(2).val(),easyShopObj_payMode = 0,easyShopObj_distributionMode = 0,easyShopObj_OrderWay = 0;
+    jquery('#address').css('width',addressWidth);
+    var jsonObj = {"consignee":"","contactWay":"","metaNameLocationContent":"","detailedAddress":"","easyShopObj":{"payMode":"","distributionMode":"","OrderWay":""}};
+    
+    jquery('#ShoppingMode').css('height',ShoppingModeHeight+'px');
+    jquery('#sumbit').css({"top":sumbit_top+'px',"position":"absolute","width":"100%"});
+    jquery('.weui-cells').find('a').eq(0).on('click',function(e){
+        openCity();
+    });
+    jquery('.weui-cells').find('a').eq(1).on('click',function(e){
+        if(showflag){
+            
+            jquery('#ShoppingMode').show();
+        } else {
+            jquery('#ShoppingMode').hide();
+        }
+        showflag = !showflag;
+        console.log(showflag);
+    });
+    jquery('.st-block').on('click',function(e){
+        closeCity();
+    });
+    jquery('.st-header_close').on('click',function(){
+        closeCity();
+    });
+    //保存按钮
+    jquery('#sumbit').on('click','a',function(){
+        judgement();
+        jsonObj = {"consignee":"","contactWay":"","metaNameLocationContent":"","detailedAddress":"","easyShopObj":{"payMode":"","distributionMode":"","OrderWay":""}};
+        jsonObj.consignee = consignee;
+        jsonObj.contactWay = contactWay;
+        jsonObj.metaNameLocationContent = metaNameLocationContent;
+        jsonObj.detailedAddress = detailedAddress;
+        jsonObj.easyShopObj.payMode = easyShopObj_payMode;
+        jsonObj.easyShopObj.distributionMode = easyShopObj_distributionMode;
+        jsonObj.easyShopObj.OrderWay = easyShopObj_OrderWay;
+        console.log(jsonObj);
+    });
+
+    function initCity() {
+        onceflag = false;
+        jquery('#initCity').show();
+        var provinceStr = '';
+        forEachData(citysData, 1 ,'citys_province', '`');
+
+        jquery('#citys_province').on('click','li',function (e){
+            jquery(this).addClass('current').siblings().removeClass('current');
+            $('#citys_city,#citys_county,#address').html('');
+            jquery('.weui-navbar').find('.weui-navbar__item').eq(2).hide();
+            setTimeout(function(){
+                var cityStr = '';
+                var itemLi = jquery(e.target).closest('li').attr('index');
+                province = jquery(e.target).closest('li').attr('city');
+                jquery('.weui-navbar').find('.weui-navbar__item').eq(0).html(province).removeClass('weui-bar__item_on');
+                var itemData = citysData[itemLi]['c'];
+                forEachData(itemData, 1 ,'citys_city', itemLi,e);
+                jquery('.st-citys_province').hide();
+                jquery('.st-citys_city').show();
+                jquery('.weui-navbar').find('.weui-navbar__item').eq(1).show().addClass('weui-bar__item_on').html('请选择');
+            },150);
+        })
+
+        jquery('#citys_city').on('click','li',function (e){
+            jquery(this).addClass('current').siblings().removeClass('current');
+            $('#citys_county,#address').html('');
+            setTimeout(function(){
+                var countyStr = '';
+                var itemIndex = jquery(e.target).closest('li').attr('itemIndex');
+                var itemLi = jquery(e.target).closest('li').attr('index');
+                var itemData = citysData[itemIndex]['c'][itemLi]['a'];
+                city = jquery(e.target).closest('li').attr('city');
+                jquery('.weui-navbar').find('.weui-navbar__item').eq(1).html(city).removeClass('weui-bar__item_on');
+                forEachData(itemData, 0 ,'citys_county', itemLi);
+                jquery('.st-citys_city').hide();
+                jquery('.st-citys_county').show();
+                jquery('.weui-navbar').find('.weui-navbar__item').eq(2).show().addClass('weui-bar__item_on').html('请选择');
+            },150);
+        })
+
+        jquery('#citys_county').on('click','li',function (e){
+            jquery(this).addClass('current').siblings().removeClass('current');
+            county = jquery(e.target).closest('li').attr('city');
+            jquery('.weui-navbar').find('.weui-navbar__item').eq(2).html(county);
+            jquery('#address').html(province+city+county);
+            closeCity();
+        })
+
+        jquery('.weui-navbar').on('click','div.weui-navbar__item',function (e){
+            jquery(this).addClass('weui-bar__item_on').siblings().removeClass('weui-bar__item_on');
+            var className = jquery(e.target).closest('div.weui-navbar__item').attr('val');
+            jquery('.st-citys_province,.st-citys_city,.st-citys_county').hide();
+            // $(this).nextAll('div.weui-navbar__item').hide();
+            jquery('#address').html('');
+            jquery('.st-'+className).show();
+        })
+    }
+    function openCity() {
+        if (onceflag) initCity();
+        jquery('.st-pusher').addClass('aaa')
+        setTimeout(function(){
+            jquery('.st-block').show();
+            jquery('.st-pusher').addClass('bbb')    
+            jquery('#initCity').addClass('ccc')
+        },200)
+    }
+    function closeCity() {
+        jquery('.st-block').hide();
+        jquery('#initCity').removeClass('ccc')
+        jquery('.st-pusher').removeClass('bbb') 
+        setTimeout(function(){  
+            jquery('.st-pusher').removeClass('aaa')
+        },50)
+    }
+    function forEachData (data , flag , id ,itemIndex,e) {
+        var itemData = '',str = '';
+        data.forEach( function (item ,index) {
+            if (flag === 1) {
+                itemData = item['n'];
+            } else {
+                itemData = item;
+            }
+            str += '<li index='+index+' itemIndex='+itemIndex+' city='+itemData+'>'+itemData+'</li>';
+        })
+        jquery('#'+id).html(str);
+    }
+
+
+    jquery('#payMode').on('click','a',function (e){
+        jquery(this).addClass('weui-btn_warn1 weui-btn1').siblings().removeClass('weui-btn_warn1 weui-btn1'); 
+        easyShopObj_payMode = jquery(this).attr('way');
+    })
+    jquery('#distributionMode').on('click','a',function (e){
+        jquery(this).addClass('weui-btn_warn1 weui-btn1').siblings().removeClass('weui-btn_warn1 weui-btn1');   
+        easyShopObj_distributionMode = jquery(this).attr('way');
+    })
+    jquery('#OrderWay').on('click','a',function (e){
+        jquery(this).addClass('weui-btn_warn1 weui-btn1').siblings().removeClass('weui-btn_warn1 weui-btn1'); 
+        easyShopObj_OrderWay = jquery(this).attr('way');
+    })
+
+    function judgement() {
+        if(!jquery('#initForm').find('input').eq(0).val()){
+            toast('请填写收货人');
+        }else if(!jquery('#initForm').find('input').eq(1).val()){
+            toast('请填写联系方式');
+        }else if(!jquery('#address').text()){
+            toast('请填写所在地区');
+        }else if(!jquery('#initForm').find('input').eq(2).val()){
+            toast('请填写详细地址');
+        }else {
+            weui_toast();
+            consignee = jquery('#initForm').find('input').eq(0).val();
+            contactWay = jquery('#initForm').find('input').eq(1).val();
+            metaNameLocationContent = jquery('#address').text();
+            console.log(jquery('#address').text())
+            detailedAddress = jquery('#initForm').find('input').eq(2).val();
+        }
+    }
+    function toast(msg) {
+        jquery('#toastMsg').html(msg);
+        jquery('#toast').fadeIn();
+        setTimeout(function (){
+            jquery('#toast').fadeOut();
+        },1000)
+    }
+    function weui_toast() {
+        jquery('.weui-toast').fadeIn();
+        setTimeout(function (){
+            jquery('.weui-toast').fadeOut();
+        },1000)
+    }
+
+</script>
+<!--<script>
+    var jquery = $;
+    var citysData = citys;
+    var provinceStr = '';
+    var province = '',city = '',county='';
+    forEachData(citysData, 1 ,'citys_province', '`');
+
+    jquery('#citys_province').on('click','li',function (e){
+        jquery(this).addClass('current').siblings().removeClass('current');
+        $('#citys_city,#citys_county,#address').html('');
+        var cityStr = '';
+        var itemLi = jquery(e.target).closest('li').attr('index');
+        province = jquery(e.target).closest('li').attr('city');
+        var itemData = citysData[itemLi]['c'];
+        forEachData(itemData, 1 ,'citys_city', itemLi,e);
+    })
+
+    jquery('#citys_city').on('click','li',function (e){
+        jquery(this).addClass('current').siblings().removeClass('current');
+        $('#citys_county,#address').html('');
+        var countyStr = '';
+        var itemIndex = jquery(e.target).closest('li').attr('itemIndex');
+        var itemLi = jquery(e.target).closest('li').attr('index');
+        var itemData = citysData[itemIndex]['c'][itemLi]['a'];
+        city = jquery(e.target).closest('li').attr('city');
+        forEachData(itemData, 0 ,'citys_county', itemLi);
+    })
+
+    jquery('#citys_county').on('click','li',function (e){
+        jquery(this).addClass('current').siblings().removeClass('current');
+        county = jquery(e.target).closest('li').attr('city');
+        jquery('#address').html(province+city+county)
+        
+    })
+
+    function forEachData (data , flag , id ,itemIndex,e) {
+        var itemData = '',str = '';
+        data.forEach( function (item ,index) {
+            if (flag === 1) {
+                itemData = item['n'];
+            } else {
+                itemData = item;
+            }
+            str += '<li index='+index+' itemIndex='+itemIndex+' city='+itemData+'><span>'+itemData+'</span></li>';
+        })
+        jquery('#'+id).html(str);
+    }
+</script>-->
+</body>
+</html>
