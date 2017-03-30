@@ -122,7 +122,7 @@
                                 <div class="weui-cell__bd">
                                     <p>设置轻松购</p>
                                 </div>
-                                <div class="st-addresss ellipsis" id="address"></div>
+                                <div class="st-addresss ellipsis"></div>
                                 <div class="weui-cell__ft"></div>
                             </a>
                         </div>
@@ -306,7 +306,6 @@
             county = jquery(e.target).closest('li').attr('city');
             jquery('.weui-navbar').find('.weui-navbar__item').eq(2).html(county);
             jquery('#address').html(province+city+county);
-            alert(province+city+county)
             closeCity();
         })
 
